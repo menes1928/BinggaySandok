@@ -10,10 +10,10 @@ class database {
     private PDO $pdo;
 
     public function __construct(
-        string $host = 'localhost',
-        string $db = 'sandokdb',
-        string $user = 'root',
-        string $pass = '',
+        string $host = 'mysql.hostinger.com',
+        string $db = 'u679323211_sandok',
+        string $user = 'u679323211_sandok',
+        string $pass = '@Binggay123',
         string $charset = 'utf8mb4'
     ) {
         // Allow overriding defaults via globals/constants/env without changing call sites.
@@ -239,10 +239,10 @@ class database {
      * Env vars: DB_HOST, DB_NAME, DB_USER, DB_PASS, optional DB_CHARSET
      */
     public static function fromEnv(): self {
-        $host = getenv('DB_HOST') ?: 'localhost';
-        $db   = getenv('DB_NAME') ?: 'sandokdb';
-        $user = getenv('DB_USER') ?: 'root';
-        $pass = getenv('DB_PASS') ?: '';
+        $host = getenv('DB_HOST') ?: 'mysql.hostinger.com';
+        $db   = getenv('DB_NAME') ?: 'u679323211_sandok';
+        $user = getenv('DB_USER') ?: 'u679323211_sandok';
+        $pass = getenv('DB_PASS') ?: '@Binggay123';
         $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
         return new self($host, $db, $user, $pass, $charset);
     }
