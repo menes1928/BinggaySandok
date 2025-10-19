@@ -58,6 +58,7 @@
             transition: all 0.3s ease;
         }
         
+        
         .navbar.scrolled {
             background: rgba(27, 67, 50, 1);
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
