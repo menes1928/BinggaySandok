@@ -58,7 +58,7 @@
             transition: all 0.3s ease;
         }
         
-        
+
         .navbar.scrolled {
             background: rgba(27, 67, 50, 1);
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
@@ -1125,11 +1125,11 @@
             e.preventDefault();
             // If not logged in, send to login with safe next to user booking
             if (!(window.SNB_USER && window.SNB_USER.loggedIn)) {
-                window.location.href = 'login?next=' + encodeURIComponent('/Binggay/user/booking');
+                window.location.href = 'login?next=' + encodeURIComponent((window.appBasePrefix||'') + '/user/booking');
                 return false;
             }
             // If already logged in, take them to the user booking page
-            window.location.href = '/Binggay/user/booking';
+            window.location.href = (window.appBasePrefix||'') + '/user/booking';
             return false;
         });
 

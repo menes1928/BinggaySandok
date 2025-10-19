@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/classes/database.php';
+require_once __DIR__ . '/config/app.php';
 $db = new database();
 
 
@@ -18,21 +19,21 @@ function normalize_menu_pic($raw) {
 
  
     if (strpos($raw, '/') === false) {
-        return '/Binggay/menu/' . $raw;
+        return app_base_prefix() . '/menu/' . $raw;
     }
 
   
     if (preg_match('~^(menu|images|uploads)(/|$)~i', $raw)) {
-        return '/Binggay/' . ltrim($raw, '/');
+        return app_base_prefix() . '/' . ltrim($raw, '/');
     }
 
 
-    if (preg_match('~(?:^|/)Binggay/(.+)$~i', $raw, $m)) {
-        return '/Binggay/' . ltrim($m[1], '/');
+    if (preg_match('~(?:^|/)(?:Binggay|BinggaySandok)/(.+)$~i', $raw, $m)) {
+        return app_base_prefix() . '/' . ltrim($m[1], '/');
     }
 
 
-    return '/Binggay/' . ltrim($raw, '/');
+    return app_base_prefix() . '/' . ltrim($raw, '/');
 }
 
 // Categories from DB with an 'All' pseudo-category
@@ -89,6 +90,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
     <title>Sandok ni Binggay - Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>window.appBasePrefix = '<?= addslashes(app_base_prefix()) ?>';</script>
     <style>
         :root {
             --font-size: 16px;
@@ -604,7 +606,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
 
         // Helper: redirect to login with message and return path
         function goLoginForOrder(){
-            const next = '/Binggay/menu';
+            const next = (window.appBasePrefix||'') + '/menu';
             window.location.href = `login?msg=login_required&next=${encodeURIComponent(next)}`;
         }
 

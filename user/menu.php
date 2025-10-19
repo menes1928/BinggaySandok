@@ -4,6 +4,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 require_once __DIR__ . '/../classes/database.php';
+require_once __DIR__ . '/../config/app.php';
 $db = new database();
 
 
@@ -23,8 +24,8 @@ function normalize_menu_pic($raw) {
     }
 
     // If path contains the project root once, cut to web path
-    if (preg_match('~(?:^|/)Binggay/(.+)$~i', $raw, $m)) {
-        return '/Binggay/' . ltrim($m[1], '/');
+    if (preg_match('~(?:^|/)(?:Binggay|BinggaySandok)/(.+)$~i', $raw, $m)) {
+        return app_base_prefix() . '/' . ltrim($m[1], '/');
     }
 
     // Windows absolute path without Binggay segment: use basename under images/menu
@@ -33,21 +34,21 @@ function normalize_menu_pic($raw) {
         if ($base === '' || strcasecmp($base, 'default.jpg') === 0) {
             return 'https://placehold.co/800x600?text=Menu+Photo';
         }
-        return '/Binggay/menu/' . $base;
+        return app_base_prefix() . '/menu/' . $base;
     }
 
     // If already starts with a known web-rooted segment
     if (preg_match('~^(images|uploads|FINALS)(/|$)~i', $raw)) {
-        return '/Binggay/' . ltrim($raw, '/');
+        return app_base_prefix() . '/' . ltrim($raw, '/');
     }
 
     // Bare filename -> assume images/menu/
     if (strpos($raw, '/') === false) {
-        return '/Binggay/menu/' . $raw;
+        return app_base_prefix() . '/menu/' . $raw;
     }
 
     // Fallback: ensure it is under site root
-    return '/Binggay/' . ltrim($raw, '/');
+    return app_base_prefix() . '/' . ltrim($raw, '/');
 }
 
 // Categories from DB with an 'All' pseudo-category
@@ -994,7 +995,8 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
         // Ensure user is logged in; otherwise redirect to login with notice and next
         function requireLoginRedirect() {
             const current = (window.location.pathname || '') + (window.location.search || '') + (window.location.hash || '');
-            const target = '/Binggay/login.php?msg=login_required&next=' + encodeURIComponent(current);
+            const base = (window.appBasePrefix || '');
+            const target = base + '/login.php?msg=login_required&next=' + encodeURIComponent(current);
             window.location.href = target;
         }
 

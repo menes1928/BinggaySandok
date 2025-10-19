@@ -5,6 +5,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 require_once __DIR__ . '/../classes/database.php';
+require_once __DIR__ . '/../config/app.php';
 $db = new database();
 $pdo = $db->opencon();
 
@@ -43,15 +44,16 @@ function normalize_pkg_pic($raw, $fallback = '../images/logo.png') {
     if ($raw === '') return $fallback;
     $raw = str_replace('\\', '/', $raw);
     if (preg_match('~^https?://~i', $raw)) return $raw;
-    if (preg_match('~(?:^|/)Binggay/(.+)$~i', $raw, $m)) {
-        $path = '/Binggay/' . ltrim($m[1], '/');
+    $base = app_base_prefix();
+    if (preg_match('~(?:^|/)(?:Binggay|BinggaySandok)/(.+)$~i', $raw, $m)) {
+        $path = $base . '/' . ltrim($m[1], '/');
     } elseif (preg_match('~^(uploads|images|menu)(/|$)~i', $raw)) {
-        $path = '/Binggay/' . ltrim($raw, '/');
+        $path = $base . '/' . ltrim($raw, '/');
     } elseif (strpos($raw, '/') === false) {
         // likely stored as filename; assume uploads/packages/
-        $path = '/Binggay/uploads/packages/' . $raw;
+        $path = $base . '/uploads/packages/' . $raw;
     } else {
-        $path = '/Binggay/' . ltrim($raw, '/');
+        $path = $base . '/' . ltrim($raw, '/');
     }
     // cache bust if file exists
     $abs = realpath(__DIR__ . '/../' . ltrim($path, '/'));

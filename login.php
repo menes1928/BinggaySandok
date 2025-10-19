@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/classes/database.php';
+require_once __DIR__ . '/config/app.php';
 
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
@@ -76,9 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     if ($redirect === '') {
                         // Simple role-based fallback: 1 = admin
                         // Use explicit .php so it works on hosts without extensionless routing
+                        $base = app_base_prefix();
                         $redirect = ((int)$user['user_type'] === 1)
-                            ? '/Binggay/admin/admin'
-                            : '/Binggay/user/index';
+                            ? ($base . '/admin/admin')
+                            : ($base . '/user/index');
                     }
                     header('Location: ' . $redirect);
                     exit;

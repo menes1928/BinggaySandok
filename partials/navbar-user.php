@@ -9,6 +9,7 @@ $FORCE_NAV_MODE = 'user';
 $NAV_IS_LOGGED_IN = !empty($_SESSION['user_id']);
 
 require_once __DIR__ . '/../classes/database.php';
+require_once __DIR__ . '/../config/app.php';
 
 function normalize_user_photo_path_user(?string $raw): ?string {
     if ($raw === null) return null;
@@ -21,36 +22,36 @@ function normalize_user_photo_path_user(?string $raw): ?string {
     // Full URL
     if (preg_match('~^https?://~i', $raw)) return $raw;
 
-    // If it's an absolute filesystem path, try to extract after /Binggay/
-    if (preg_match('~Binggay/(.+)$~i', $raw, $m)) {
+    // If it's an absolute filesystem path, try to extract after the project segment
+    if (preg_match('~(?:Binggay|BinggaySandok)/(.+)$~i', $raw, $m)) {
         $rel = ltrim($m[1], '/');
-        return '/Binggay/' . $rel;
+        return app_base_prefix() . '/' . $rel;
     }
 
     // If already starts with a known web-rooted segment
     if (preg_match('~^(uploads(?:/profile)?|profile|profiles|images)(/|$)~i', $raw)) {
-        return '/Binggay/' . ltrim($raw, '/');
+        return app_base_prefix() . '/' . ltrim($raw, '/');
     }
 
     // If looks like a Windows absolute path without Binggay segment, use the basename
     if (preg_match('~^[A-Za-z]:/|^/~', $raw)) {
         $base = basename($raw);
         if ($base !== '') {
-            return '/Binggay/uploads/profile/' . $base;
+            return app_base_prefix() . '/uploads/profile/' . $base;
         }
     }
 
     // If it's just a filename, assume it's in uploads/profile/
     if (strpos($raw, '/') === false) {
-        return '/Binggay/uploads/profile/' . $raw;
+        return app_base_prefix() . '/uploads/profile/' . $raw;
     }
 
     // Fallback: ensure it is under site root
-    return '/Binggay/' . ltrim($raw, '/');
+    return app_base_prefix() . '/' . ltrim($raw, '/');
 }
 
 function current_user_avatar_user(): string {
-    $default = '/Binggay/images/logo.png';
+    $default = app_base_prefix() . '/images/logo.png';
     $id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
     if ($id <= 0) return $default;
 
@@ -156,7 +157,7 @@ function current_user_display_name_user() {
                     </button>
                     <div class="relative" id="nav-profile">
                         <button id="profile-btn" class="flex items-center gap-2 text-white hover:text-yellow-400 transition-colors">
-                            <img src="<?php echo htmlspecialchars(current_user_avatar_user()); ?>" alt="Avatar" class="w-9 h-9 md:w-8 md:h-8 lg:w-9 lg:h-9 rounded-full object-cover border border-yellow-400/30" onerror="this.onerror=null;this.src='/Binggay/images/logo.png';" />
+                            <img src="<?php echo htmlspecialchars(current_user_avatar_user()); ?>" alt="Avatar" class="w-9 h-9 md:w-8 md:h-8 lg:w-9 lg:h-9 rounded-full object-cover border border-yellow-400/30" onerror="this.onerror=null;this.src='<?= app_base_prefix() ?>/images/logo.png';" />
                             <span class="max-w-[160px] md:max-w-[120px] lg:max-w-[200px] truncate text-sm md:text-xs lg:text-base"><span class="hidden lg:inline">Welcome, </span><?php echo htmlspecialchars(current_user_display_name_user()); ?></span>
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
                         </button>
@@ -230,6 +231,8 @@ function current_user_display_name_user() {
 
 <script>
     (function(){
+    // Expose base prefix for front-end routing
+    window.appBasePrefix = '<?= addslashes(app_base_prefix()) ?>';
         const navRoot = document.querySelector('header.nav-root');
         const loginBtn = document.getElementById('login-btn-nav');
         const links = Array.from(document.querySelectorAll('.nav-link'));

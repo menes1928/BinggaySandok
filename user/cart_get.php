@@ -4,16 +4,18 @@ header('Content-Type: application/json');
 if (empty($_SESSION['user_id'])) { http_response_code(401); echo json_encode(['ok'=>false,'error'=>'Not authenticated']); exit; }
 
 require_once __DIR__ . '/../classes/database.php';
+require_once __DIR__ . '/../config/app.php';
 
 function normalize_menu_pic($raw) {
     $raw = trim((string)$raw);
     if ($raw === '') return 'https://placehold.co/800x600?text=Menu+Photo';
     $raw = str_replace('\\', '/', $raw);
     if (preg_match('~^https?://~i', $raw)) return $raw;
-    if (strpos($raw, '/') === false) return '/Binggay/menu/' . $raw;
-    if (preg_match('~^(menu|images|uploads)(/|$)~i', $raw)) return '/Binggay/' . ltrim($raw, '/');
-    if (preg_match('~(?:^|/)Binggay/(.+)$~i', $raw, $m)) return '/Binggay/' . ltrim($m[1], '/');
-    return '/Binggay/' . ltrim($raw, '/');
+    $base = app_base_prefix();
+    if (strpos($raw, '/') === false) return $base . '/menu/' . $raw;
+    if (preg_match('~^(menu|images|uploads)(/|$)~i', $raw)) return $base . '/' . ltrim($raw, '/');
+    if (preg_match('~(?:^|/)(?:Binggay|BinggaySandok)/(.+)$~i', $raw, $m)) return $base . '/' . ltrim($m[1], '/');
+    return $base . '/' . ltrim($raw, '/');
 }
 
 try {
