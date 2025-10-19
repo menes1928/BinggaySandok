@@ -1,0 +1,12 @@
+# Ignore local environment secrets
+classes/db_config.php
+
+# Node modules (if any)
+node_modules/
+
+# Composer vendor (if added)
+vendor/
+
+# OS cruft
+.DS_Store
+Thumbs.db

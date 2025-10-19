@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Serve existing files or directories as-is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Rewrite clean URLs (e.g., /cateringpackages) to their PHP counterparts
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+# Ensure default index file resolves without listing
+DirectoryIndex index.php index.html

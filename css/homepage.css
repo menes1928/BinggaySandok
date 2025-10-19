@@ -1,0 +1,698 @@
+body {
+      font-family: 'Segoe UI', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    .brand-color {
+      background-color: #00752a;
+      color: white;
+    }
+
+    .highlight-color {
+      background-color: #e8501d;
+      color: white;
+    }
+
+    .section-heading {
+      color: #00752a;
+      font-weight: 700;
+    }
+
+    .hero-section {
+  min-height: 100vh;
+  background: url('../images/bg.png') no-repeat center center/cover;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(255, 68, 0, 0.295);
+  z-index: 1;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+#h1{
+    font-size: 70px;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.808);
+    
+}
+
+    .cart-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #00752a;
+      color: white;
+      border-radius: 50%;
+      padding: 10px 14px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 1050;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cart-icon:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 10px 3px #e8501d;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #e8501d;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    .btn-success {
+      transition: all 0.3s ease-in-out;
+      border-radius: 12px;
+    }
+
+    .btn-success:hover {
+      transform: scale(1.1) rotate(-1deg);
+      box-shadow: 0 0 12px #e8501d;
+    }
+
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .rounded-img {
+      border-radius: 20px;
+    }
+
+    /* Back to top */
+    #backToTop {
+      position: fixed;
+      bottom: 20px;
+      right: 25px;
+      background-color: #00752a;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 50%;
+      font-size: 18px;
+      display: none;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.548);
+    }
+
+    #backToTop:hover {
+      background-color: #e8501d;
+    }
+
+    .navbar-brand {
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #ffd1b3;
+}
+
+.nav-underline {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 50%;
+  bottom: 0;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link:hover .nav-underline {
+  width: 100%;
+  left: 0;
+}
+
+/* collection */
+
+#collection{
+  background: #e7e8e2;
+}
+
+#coll-title{
+  font-size: 80px;
+  color: #00752a;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.808);
+  font-family: 'Georgia', serif;
+
+}
+
+.section-heading{
+  justify-items: center;
+}
+
+.slider{
+  width: 100%;
+  height: var(--height); 
+  overflow : hidden;
+  mask-image: linear-gradient(to right, transparent,#000, #000, #000, #000, transparent);
+  margin-bottom: 50px;
+  
+}
+
+
+.slider .list{
+  display: flex;
+  width: 100%;
+  min-width: calc(var(--width) * var(--quantity));
+  position: relative;
+
+}
+
+.slider .list .item{
+  height: var(--height);
+  width: var(--width);
+  position: absolute;
+  left: 100%;
+  animation: runSlider 20s linear infinite;
+  transition: filter 0.5s, transform 0.3s ease;
+  animation-delay: calc( (20s / var(--quantity)) * (var(--position) - 1) ) !important;
+}
+
+.slider .list .item img{
+  width: 100%;
+  height: 80%;
+  object-fit: contain;
+  border-radius: 50px;
+  margin-top: 40px 
+}
+
+@keyframes runSlider{
+  from{
+    left: 100%;
+  }to{
+    left: calc(var(--width) * -1);
+  }
+}
+
+.slider:hover .item{
+  animation-play-state: paused !important;
+  filter: grayscale(1);
+}
+
+.slider .item:hover{
+  filter: grayscale(0);
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+
+/* about me */
+
+.about-section {
+  position: relative;
+  padding: 80px 20px;
+  text-align: center;
+  background-color: #fdfdfd;
+  font-family: 'Georgia', serif;
+  overflow: hidden;
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  background: url('../images/logo.png') center center no-repeat;
+  background-size: contain;
+  transform: translate(-50%, -50%);
+  opacity: 0.2; /* Adjust for subtle effect */
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.about-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+.about-title {
+  font-size: 80px;
+  color: #00752a;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.808);
+}
+
+.about-divider {
+  width: 600px;
+  margin-bottom: 30px;
+  filter: brightness(0) saturate(100%) invert(24%) sepia(75%) saturate(600%) hue-rotate(85deg) brightness(70%) contrast(90%);
+}
+
+.about-intro {
+  font-size: 20px;
+  max-width: 800px;
+  margin: 0 auto 130px;
+  color: #000000;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+.about-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.about-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.about-col.card {
+  position: relative;
+  width: 360px;
+  height: 300px;
+  perspective: 1000px;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.507);
+  transition: transform 0.3s ease;
+}
+
+
+.card .face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transition: transform 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+
+.face1 {
+  z-index: 2;
+  color: #ffffff;
+}
+
+
+.face2 {
+  transform: translateY(100%);
+  z-index: 1;
+  background-color: #ffffff;
+  color: #000000;
+  line-height: 1.6;
+}
+
+
+.card:hover .face1 {
+  transform: translateY(-100%);
+}
+
+.card:hover .face2 {
+  transform: translateY(0%);
+}
+
+
+.card.green .face1 {
+  background-color: #0c4b27;
+}
+
+.card.red .face1 {
+  background-color: #d22128;
+}
+
+.card.yellow .face1 {
+  background-color: #f8b737;
+  color: #000; 
+}
+
+.card .face h3{
+  margin: 0;
+  font-size: 30px;
+}
+
+.card .face p {
+  margin: 0;
+  font-size: 20px;
+}
+.face1 h3 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+
+/* our service */
+#services{
+background: #f8f8f4;
+}
+
+
+.service-card {
+  position: relative;
+  display: block;
+  height: 450px;
+  overflow: hidden;
+  border-radius: 15px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.service-card:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.582);
+}
+
+.service-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.service-card .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20px;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.service-card:hover .overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card .overlay h4 {
+  position: absolute;
+  bottom: 20px;
+  left: 40%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: #fff;
+  font-size: 3rem;
+  font-family: 'Caveat', cursive;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+#serviceH2{
+  font-size: 80px;
+  color: #00752a;
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.808);
+  font-family: 'Georgia', serif;
+  
+}
+
+/* above footer */
+
+.custom-footer {
+  position: relative;
+  background: url('../images/footer.jpg') no-repeat center center / cover;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-overlay {
+  background: rgba(33, 70, 50, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: brightness(0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-title {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+.footer-desc {
+  color: #e0f5df;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.footer-heading {
+  font-size: 1.9rem;
+  font-weight: bold;
+  color: #ffffff;
+  border-bottom: 3px solid #e8501d;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.footer-link {
+  font-size: 20px;
+  color: #e0f5df;
+  text-decoration: none;
+  display: block;
+  margin: 6px 0;
+  transition: color 0.3s ease, scale 0.5 ease;
+}
+
+.footer-link:hover {
+  color: #a8f0c6;
+  text-decoration: underline;
+  transform: scale(1.1);
+}
+
+.profile-dropdown .dropdown-menu {
+  min-width: 180px;
+  right: 0;
+  left: auto;
+}
+.profile-img-navbar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+.profile-dropdown {
+  margin-left: auto;
+}
+@media (max-width: 991.98px) {
+  .profile-dropdown {
+    margin-top: 1rem;
+  }
+}
+
+/* Fix profile dropdown position for mobile and small screens */
+@media (max-width: 991.98px) {
+  .profile-dropdown .dropdown-menu {
+    left: auto !important;
+    right: 10px !important;
+    transform: none !important;
+    min-width: 180px;
+  }
+}
+
+/* On extra small screens, make sure dropdown doesn't overflow */
+@media (max-width: 575.98px) {
+  .profile-dropdown .dropdown-menu {
+    min-width: 150px;
+    left: auto !important;
+    right: 5px !important;
+    transform: none !important;
+  }
+}
+
+/* Responsive footer columns: stack vertically on small screens, horizontal on md+ */
+@media (max-width: 991.98px) {
+  .custom-footer .row > div[class^="col-"] {
+    text-align: center !important;
+    margin-bottom: 1.5rem;
+  }
+  .custom-footer .footer-title,
+  .custom-footer .footer-desc,
+  .custom-footer .footer-heading,
+  .custom-footer .footer-link {
+    text-align: center !important;
+  }
+  .custom-footer .row {
+    flex-direction: column !important;
+  }
+}
+
+/* Ensure footer columns have spacing and don't overlap on all screens */
+.custom-footer .row > div[class^="col-"] {
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* Prevent long text from overflowing in footer */
+.custom-footer .footer-link,
+.custom-footer .footer-desc,
+.custom-footer .footer-title,
+.custom-footer .footer-heading {
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Footer: reduce padding and font size on mobile for better fit */
+@media (max-width: 575.98px) {
+  .custom-footer .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .footer-title {
+    font-size: 1.2rem;
+  }
+  .footer-link,
+  .footer-desc,
+  .footer-heading {
+    font-size: 0.95rem;
+  }
+  .custom-footer .row > div[class^="col-"] {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Prevent footer text overflow */
+.custom-footer .footer-link,
+.custom-footer .footer-desc,
+.custom-footer .footer-title,
+.custom-footer .footer-heading {
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Make the "Collections" heading smaller on mobile */
+@media (max-width: 575.98px) {
+  #coll-title {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    padding: 0 0.5rem;
+    word-break: break-word;
+  }
+}
+
+/* Optionally, adjust for tablets too */
+@media (max-width: 767.98px) and (min-width: 576px) {
+  #coll-title {
+    font-size: 2.2rem;
+    line-height: 1.1;
+    padding: 0 1rem;
+  }
+}
+
+/* Make the "About Us" and "Our Services" headings smaller on mobile */
+@media (max-width: 575.98px) {
+  .about-title,
+  #serviceH2 {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    padding: 0 0.5rem;
+    word-break: break-word;
+  }
+}
+
+/* Optionally, adjust for tablets too */
+@media (max-width: 767.98px) and (min-width: 576px) {
+  .about-title,
+  #serviceH2 {
+    font-size: 2.2rem;
+    line-height: 1.1;
+    padding: 0 1rem;
+  }
+}
+
+/* Make the divider image a bit bigger on mobile */
+@media (max-width: 575.98px) {
+  .about-divider {
+    width: 120px !important;
+    max-width: 95vw;
+    margin-bottom: 20px;
+  }
+}
+
+/* Adjust divider size for tablets */
+@media (max-width: 767.98px) and (min-width: 576px) {
+  .about-divider {
+    width: 170px !important;
+    max-width: 180px;
+    margin-bottom: 22px;
+  }
+}
+
+/* Hide extra footer texts and columns on tablets (iPad Mini/Air) and mobile */
+@media (max-width: 991.98px) {
+  /* Hide Quick Links and extra contact info */
+  .custom-footer .footer-desc,
+  .custom-footer .footer-heading,
+  .custom-footer .col-md-3.d-none.d-md-block,
+  .custom-footer .footer-heading.d-none.d-md-block,
+  .custom-footer .footer-desc.d-none.d-md-block,
+  .custom-footer .footer-heading.d-none.d-md-block,
+  .custom-footer .col-md-3.d-none.d-md-block {
+    display: none !important;
+  }
+  /* Only show Facebook link in Connect With Us */
+  .custom-footer .footer-link {
+    display: none;
+  }
+  .custom-footer .footer-link:first-child {
+    display: block;
+  }
+  /* Ensure brand info is visible */
+  .custom-footer .footer-title {
+    display: block;
+  }
+}
+
