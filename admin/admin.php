@@ -755,7 +755,7 @@ if ($sectionEarly === 'bookings') {
                     'addons'     => (string)($brow['eb_addon_pax'] ?? ''),
                     'notes'      => (string)($brow['eb_notes'] ?? ''),
                 ];
-                if ($toEmail) { [$subject,$html]=$mailer->renderBookingEmail($data,'Partial'); $mailer->send($toEmail,$toName?:$data['fullName'],$subject,$html); }
+                if ($toEmail) { [$subject,$html]=$mailer->renderBookingEmail($data,'Downpayment'); $mailer->send($toEmail,$toName?:$data['fullName'],$subject,$html); }
             } catch (Throwable $e) {}
             echo json_encode(['success'=>true]);
         } catch (Throwable $e) {

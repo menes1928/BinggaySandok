@@ -156,8 +156,8 @@ try {
             'addons'      => $cp_addon_pax,
             'notes'       => $notes,
         ];
-        $label = ($pay_now + 0.01 >= $calc_total) ? 'Full' : 'Partial';
-        [$subject,$html] = $mailer->renderCateringEmail($edata, $label);
+    // Initial submission should be acknowledged as Pending until admin verifies payment
+    [$subject,$html] = $mailer->renderCateringEmail($edata, 'Pending');
         if ($userEmail) { $mailer->send($userEmail, $toName ?: $full_name, $subject, $html); }
     } catch (Throwable $e) { /* ignore mail errors */ }
 

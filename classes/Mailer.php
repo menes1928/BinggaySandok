@@ -13,9 +13,25 @@ class Mailer
         $this->cfg = file_exists($configPath) ? (require $configPath) : [];
     }
 
-    private function baseMailer(): PHPMailer
-    {
-        require_once __DIR__ . '/../PHPMailer/vendor/autoload.php';
+  private function baseMailer(): PHPMailer
+  {
+    // Try common composer autoload locations
+    $autoloadPaths = [
+      __DIR__ . '/../vendor/autoload.php',                  // project root vendor
+      __DIR__ . '/../PHPMailer/vendor/autoload.php',        // library vendored inside PHPMailer/
+      dirname(__DIR__, 2) . '/vendor/autoload.php',         // repo root (in case classes/ nested deeper)
+    ];
+    $loaded = false;
+    foreach ($autoloadPaths as $p) {
+      if (is_file($p)) {
+        require_once $p;
+        $loaded = true;
+        break;
+      }
+    }
+    if (!$loaded) {
+      throw new \RuntimeException('PHPMailer autoloader not found. Run composer install to generate vendor/autoload.php.');
+    }
 
         $mail = new PHPMailer(true);
         $mail->isSMTP();
@@ -54,11 +70,27 @@ class Mailer
             $mail->Body = $html;
             $mail->AltBody = $plainText ?: strip_tags($html);
             return $mail->send();
-        } catch (PHPMailerException $e) {
-            // Log error in production
-            return false;
+    } catch (\Throwable $e) {
+      // Fallback: use native mail() if PHPMailer isn't available
+      return $this->mailFallback($toEmail, $toName, $subject, $html, $plainText);
         }
     }
+
+  private function mailFallback(string $toEmail, string $toName, string $subject, string $html, ?string $plainText): bool
+  {
+    $from = $this->cfg['from_email'] ?? ($this->cfg['username'] ?? 'no-reply@example.com');
+    $fromName = $this->cfg['from_name'] ?? 'Sandok ni Binggay';
+    $headers = [];
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-type: text/html; charset=UTF-8';
+    $headers[] = 'From: ' . sprintf('%s <%s>', mb_encode_mimeheader($fromName, 'UTF-8'), $from);
+    if (!empty($this->cfg['reply_to'])) {
+      $headers[] = 'Reply-To: ' . $this->cfg['reply_to'];
+    }
+    $headers[] = 'X-Mailer: PHP/' . PHP_VERSION;
+    $ok = @mail($toEmail, $subject, $html, implode("\r\n", $headers));
+    return (bool)$ok;
+  }
 
     /**
      * Attempt to establish an SMTP connection without sending an email.
