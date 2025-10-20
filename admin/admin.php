@@ -675,7 +675,7 @@ if ($sectionEarly === 'bookings') {
                     'addons'     => is_null($addon)?'':(string)$addon,
                     'notes'      => $notes,
                 ];
-                if ($toEmail && in_array(strtolower($status), ['confirmed','completed','paid'])) {
+                if ($toEmail && in_array(strtolower($status), ['confirmed','completed','paid','downpayment'])) {
                     $label = ucfirst(strtolower($status));
                     [$subject, $html] = $mailer->renderBookingEmail($data, $label);
                     $mailer->send($toEmail, $toName ?: $name, $subject, $html);
