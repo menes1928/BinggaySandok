@@ -425,7 +425,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
             <div id="cartFooter" class="hidden border-t border-gray-200 p-6 space-y-4">
                 <div class="flex justify-between items-center">
                     <span class="font-medium">Total:</span>
-                    <span id="cartTotal" class="text-2xl font-bold text-primary">₱0</span>
+                    <span id="cartTotal" class="text-2xl font-bold text-primary">₱0.00</span>
                 </div>
                 <button id="checkoutBtn" class="w-full bg-primary hover:bg-green-800 text-white py-3 rounded-lg transition-colors font-medium">
                     Proceed to Checkout
@@ -503,7 +503,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
                     </div>
                 </div>
                 <div class="p-6 border-t border-gray-200 flex items-center justify-between">
-                    <div class="text-sm text-gray-600">Total: <span id="co_total" class="font-semibold text-primary">₱0</span></div>
+                    <div class="text-sm text-gray-600">Total: <span id="co_total" class="font-semibold text-primary">₱0.00</span></div>
                     <div class="flex items-center gap-3">
                         <button type="button" class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50" onclick="toggleCheckout(false)">Cancel</button>
                         <button type="submit" class="px-5 py-2 rounded-lg bg-primary text-white hover:bg-green-800">Place Order</button>
@@ -780,7 +780,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
                         <p class="text-sm text-gray-600 mb-3 line-clamp-2">${item.description}</p>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-xs font-medium ${item.available ? 'text-emerald-700' : 'text-red-700'}">${item.available ? 'Available' : 'Unavailable'}</span>
-                            <p class="text-xl font-bold text-primary">₱${item.price.toLocaleString()}</p>
+                            <p class="text-xl font-bold text-primary">${peso(item.price)}</p>
                         </div>
                         <div class="flex items-center gap-2 text-xs text-gray-500">
                             <div class="flex items-center gap-1">
@@ -835,7 +835,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
                     <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                         <div>
                             <p class="text-sm text-gray-500">Price</p>
-                            <p class="text-3xl font-bold text-primary">₱${item.price.toLocaleString()}</p>
+                            <p class="text-3xl font-bold text-primary">${peso(item.price)}</p>
                         </div>
                         <button ${item.available ? '' : 'disabled aria-disabled="true"'} onclick="${item.available ? `handleAddFromModal(${item.id})` : ''}" class="${item.available ? 'bg-primary hover:bg-green-800 text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'} px-6 py-3 rounded-lg font-medium transition-colors">
                             <i class="fas fa-plus mr-2"></i>Add to Cart
@@ -874,7 +874,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
             if (open) {
                 // Update total shown in modal
                 const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                document.getElementById('co_total').textContent = '₱' + cartTotal.toLocaleString();
+                document.getElementById('co_total').textContent = peso(cartTotal);
                 // Prepare amount field for non-cash online methods
                 const methodEl = document.getElementById('co_method');
                 const amtRow = document.getElementById('co_amount_row');
@@ -901,7 +901,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
 
         // Helper formatter
         function peso(n){
-            return '₱' + Number(n || 0).toLocaleString();
+            return '₱' + Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         // Build order payload from current form fields and cart
@@ -1089,7 +1089,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
                         <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/160x160?text=Menu';">
                         <div class="flex-1">
                             <h4 class="font-medium text-sm mb-1">${item.name}</h4>
-                            <p class="text-sm text-primary font-semibold">₱${item.price.toLocaleString()}</p>
+                            <p class="text-sm text-primary font-semibold">${peso(item.price)}</p>
                             <div class="flex items-center gap-2 mt-2">
                                 <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="w-7 h-7 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-100 transition-colors">
                                     <i class="fas fa-minus text-xs"></i>
@@ -1103,7 +1103,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'menu') {
                     </div>
                 `).join('');
 
-                document.getElementById('cartTotal').textContent = '₱' + cartTotal.toLocaleString();
+                document.getElementById('cartTotal').textContent = peso(cartTotal);
             }
 
             // Persist to localStorage
@@ -1273,7 +1273,7 @@ function menu_card_template() {
             <p class="text-sm text-gray-600 mb-3 line-clamp-2"><?php echo $item['description']; ?></p>
             <div class="flex items-center justify-between mb-3">
                 <span class="text-xs font-medium <?php echo !empty($item['available']) ? 'text-emerald-700' : 'text-red-700'; ?>"><?php echo !empty($item['available']) ? 'Available' : 'Unavailable'; ?></span>
-                <p class="text-xl font-bold text-primary">₱<?php echo number_format($item['price']); ?></p>
+                <p class="text-xl font-bold text-primary">₱<?php echo number_format($item['price'], 2); ?></p>
             </div>
             <div class="flex items-center gap-2 text-xs text-gray-500">
                 <div class="flex items-center gap-1">
