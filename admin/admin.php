@@ -657,8 +657,14 @@ if ($sectionEarly === 'bookings') {
                 $uq = $pdo->prepare("SELECT eb.*, u.user_email, u.user_fn, u.user_ln, et.name AS et_name FROM eventbookings eb LEFT JOIN users u ON u.user_id=eb.user_id LEFT JOIN event_types et ON et.event_type_id=eb.event_type_id WHERE eb.eb_id=?");
                 $uq->execute([$bid]);
                 $brow = $uq->fetch(PDO::FETCH_ASSOC) ?: [];
+                // Prefer account email; fallback to booking email on record
                 $toEmail = (string)($brow['user_email'] ?? '');
+                if ($toEmail === '' && isset($brow['eb_email']) && $brow['eb_email'] !== '') {
+                    $toEmail = (string)$brow['eb_email'];
+                }
+                // Build recipient name from account profile; fallback to booking name
                 $toName = trim(((string)($brow['user_fn'] ?? '')) . ' ' . ((string)($brow['user_ln'] ?? '')));
+                if ($toName === '' && isset($brow['eb_name']) && $brow['eb_name'] !== '') { $toName = (string)$brow['eb_name']; }
                 $data = [
                     'fullName'   => $name ?: $toName,
                     'event_type' => (string)($brow['et_name'] ?? 'Event Booking'),
@@ -669,7 +675,7 @@ if ($sectionEarly === 'bookings') {
                     'addons'     => is_null($addon)?'':(string)$addon,
                     'notes'      => $notes,
                 ];
-                if ($toEmail && in_array(strtolower($status), ['confirmed','completed','paid'])) {
+                if ($toEmail && in_array(strtolower($status), ['confirmed','completed','paid','downpayment'])) {
                     $label = ucfirst(strtolower($status));
                     [$subject, $html] = $mailer->renderBookingEmail($data, $label);
                     $mailer->send($toEmail, $toName ?: $name, $subject, $html);
@@ -702,8 +708,14 @@ if ($sectionEarly === 'bookings') {
             try {
                 require_once __DIR__ . '/../classes/Mailer.php';
                 $mailer = new Mailer();
+                // Prefer account email; fallback to booking email on record
                 $toEmail = (string)($brow['user_email'] ?? '');
+                if ($toEmail === '' && isset($brow['eb_email']) && $brow['eb_email'] !== '') {
+                    $toEmail = (string)$brow['eb_email'];
+                }
+                // Build recipient name from account profile; fallback to booking name
                 $toName = trim(((string)($brow['user_fn'] ?? '')) . ' ' . ((string)($brow['user_ln'] ?? '')));
+                if ($toName === '' && isset($brow['eb_name']) && $brow['eb_name'] !== '') { $toName = (string)$brow['eb_name']; }
                 $data = [
                     'fullName'   => (string)($brow['eb_name'] ?? $toName),
                     'event_type' => (string)($brow['et_name'] ?? 'Event Booking'),
@@ -743,8 +755,14 @@ if ($sectionEarly === 'bookings') {
             try {
                 require_once __DIR__ . '/../classes/Mailer.php';
                 $mailer = new Mailer();
+                // Prefer account email; fallback to booking email on record
                 $toEmail = (string)($brow['user_email'] ?? '');
+                if ($toEmail === '' && isset($brow['eb_email']) && $brow['eb_email'] !== '') {
+                    $toEmail = (string)$brow['eb_email'];
+                }
+                // Build recipient name from account profile; fallback to booking name
                 $toName = trim(((string)($brow['user_fn'] ?? '')) . ' ' . ((string)($brow['user_ln'] ?? '')));
+                if ($toName === '' && isset($brow['eb_name']) && $brow['eb_name'] !== '') { $toName = (string)$brow['eb_name']; }
                 $data = [
                     'fullName'   => (string)($brow['eb_name'] ?? $toName),
                     'event_type' => (string)($brow['et_name'] ?? 'Event Booking'),
@@ -755,7 +773,7 @@ if ($sectionEarly === 'bookings') {
                     'addons'     => (string)($brow['eb_addon_pax'] ?? ''),
                     'notes'      => (string)($brow['eb_notes'] ?? ''),
                 ];
-                if ($toEmail) { [$subject,$html]=$mailer->renderBookingEmail($data,'Partial'); $mailer->send($toEmail,$toName?:$data['fullName'],$subject,$html); }
+                if ($toEmail) { [$subject,$html]=$mailer->renderBookingEmail($data,'Downpayment'); $mailer->send($toEmail,$toName?:$data['fullName'],$subject,$html); }
             } catch (Throwable $e) {}
             echo json_encode(['success'=>true]);
         } catch (Throwable $e) {

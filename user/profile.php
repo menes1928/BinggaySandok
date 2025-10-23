@@ -116,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fn = trim($data['first_name'] ?? '');
         $ln = trim($data['last_name'] ?? '');
         $un = trim($data['username'] ?? '');
-        $em = trim($data['email'] ?? '');
         $ph = trim($data['phone'] ?? '');
 
         // Basic validations
@@ -124,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($fn === '') { $errors['first_name'] = 'First name is required'; }
         if ($ln === '') { $errors['last_name'] = 'Last name is required'; }
         if ($un === '') { $errors['username'] = 'Username is required'; }
-        if ($em === '' || !filter_var($em, FILTER_VALIDATE_EMAIL)) { $errors['email'] = 'Valid email is required'; }
         if (!empty($errors)) {
             echo json_encode(['ok' => false, 'errors' => $errors, 'message' => 'Please fix the highlighted fields.']);
             exit;
@@ -138,16 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(['ok' => false, 'errors' => ['username' => 'Username is already taken'], 'message' => 'Username already in use.']);
                 exit;
             }
-            $st = $pdo->prepare('SELECT COUNT(*) FROM users WHERE user_email = ? AND user_id <> ?');
-            $st->execute([$em, $uid]);
-            if ((int)$st->fetchColumn() > 0) {
-                echo json_encode(['ok' => false, 'errors' => ['email' => 'Email is already taken'], 'message' => 'Email already in use.']);
-                exit;
-            }
 
             // Perform update
-            $up = $pdo->prepare('UPDATE users SET user_fn = ?, user_ln = ?, user_username = ?, user_email = ?, user_phone = ?, updated_at = NOW() WHERE user_id = ?');
-            $up->execute([$fn, $ln, $un, $em, $ph, $uid]);
+            // Email is not editable here; do not update user_email
+            $up = $pdo->prepare('UPDATE users SET user_fn = ?, user_ln = ?, user_username = ?, user_phone = ?, updated_at = NOW() WHERE user_id = ?');
+            $up->execute([$fn, $ln, $un, $ph, $uid]);
             $affected = $up->rowCount();
 
             echo json_encode(['ok' => true, 'message' => 'Profile updated successfully.', 'affected' => $affected]);
@@ -1466,7 +1459,8 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
         const editProfileBtn = document.getElementById('editProfileBtn');
         const saveProfileBtn = document.getElementById('saveProfileBtn');
         const editActions = document.getElementById('editActions');
-        const profileInputs = ['firstName', 'lastName', 'username', 'email', 'phone'];
+    // Email is view-only; keep it disabled and don't include in editable list
+    const profileInputs = ['firstName', 'lastName', 'username', 'phone'];
 
         editProfileBtn.addEventListener('click', () => {
             isEditing = !isEditing;
@@ -1491,7 +1485,7 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const username = document.getElementById('username').value.trim();
-            const email = document.getElementById('email').value.trim();
+            // Email is not editable; do not read or send it
             const phone = document.getElementById('phone').value.trim();
 
             saveProfileBtn.disabled = true;
@@ -1506,7 +1500,7 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
                     first_name: firstName,
                     last_name: lastName,
                     username: username,
-                    email: email,
+                    // email is intentionally not sent; updates are disabled
                     phone: phone
                 })
             })
